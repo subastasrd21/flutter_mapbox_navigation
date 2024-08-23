@@ -57,7 +57,6 @@ class FlutterMapboxNavigationPlugin : FlutterPlugin, MethodCallHandler,
         var showAlternateRoutes: Boolean = true
         var longPressDestinationEnabled: Boolean = true
         var allowsUTurnsAtWayPoints: Boolean = false
-        var enableOnMapTapCallback: Boolean = false
         var navigationMode = DirectionsCriteria.PROFILE_DRIVING_TRAFFIC
         var simulateRoute = false
         var enableFreeDriveMode = false
@@ -144,11 +143,6 @@ class FlutterMapboxNavigationPlugin : FlutterPlugin, MethodCallHandler,
         val allowsUTurns = arguments?.get("allowsUTurnsAtWayPoints") as? Boolean
         if (allowsUTurns != null) {
             allowsUTurnsAtWayPoints = allowsUTurns
-        }
-
-        val onMapTap = arguments?.get("enableOnMapTapCallback") as? Boolean
-        if (onMapTap != null) {
-            enableOnMapTapCallback = onMapTap
         }
 
         val language = arguments?.get("language") as? String

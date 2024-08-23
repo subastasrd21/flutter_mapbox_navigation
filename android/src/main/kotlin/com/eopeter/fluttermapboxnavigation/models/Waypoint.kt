@@ -9,7 +9,7 @@ import java.io.Serializable
  */
 data class Waypoint(
     @SerializedName("name")
-    val name: String = "",
+    val name: String = "Próxima Entrega", // Valor por defecto
     @SerializedName("point")
     val point: Point,
     @SerializedName("isSilent")
@@ -22,10 +22,10 @@ data class Waypoint(
     )
     constructor(name: String, point: Point) : this(name, point, false)
     constructor(longitude: Double, latitude: Double) : this(
-        "",
+        "Próxima Entrega", // Valor por defecto si no se proporciona un nombre
         Point.fromLngLat(longitude, latitude),
         false
     )
-    constructor(point: Point, isSilent: Boolean) : this("", point, isSilent)
-    constructor(point: Point) : this("", point, true)
+    constructor(point: Point, isSilent: Boolean) : this("Próxima Entrega", point, isSilent)
+    constructor(point: Point) : this("Próxima Entrega", point, true)
 }

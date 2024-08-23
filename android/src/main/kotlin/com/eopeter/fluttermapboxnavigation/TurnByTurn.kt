@@ -53,9 +53,11 @@ open class TurnByTurn(
     }
 
     open fun initNavigation() {
+        Log.d("TurnByTurn", "Initializing Navigation with context: $context and activity: $activity")
         val navigationOptions = NavigationOptions.Builder(this.context)
             .accessToken(this.token)
             .build()
+        Log.d("TurnByTurn", "NavigationOptions: $navigationOptions")
 
         MapboxNavigationApp
             .setup(navigationOptions)
@@ -66,6 +68,7 @@ open class TurnByTurn(
     }
 
     override fun onMethodCall(methodCall: MethodCall, result: MethodChannel.Result) {
+        Log.d("TurnByTurn", "Received method call: ${methodCall.method} with arguments: ${methodCall.arguments}")
         when (methodCall.method) {
             "getPlatformVersion" -> {
                 result.success("Android ${android.os.Build.VERSION.RELEASE}")
@@ -74,6 +77,7 @@ open class TurnByTurn(
                 // downloadRegionForOfflineRouting(call, result)
             }
             "buildRoute" -> {
+                Log.d("TurnByTurn", "Building route with arguments: ${methodCall.arguments}")
                 this.buildRoute(methodCall, result)
             }
             "clearRoute" -> {
@@ -101,24 +105,28 @@ open class TurnByTurn(
     }
 
     private fun buildRoute(methodCall: MethodCall, result: MethodChannel.Result) {
+        Log.d("TurnByTurn", "Building route. Method call: ${methodCall.arguments}")
         this.isNavigationCanceled = false
 
         val arguments = methodCall.arguments as? Map<*, *>
         if (arguments != null) this.setOptions(arguments)
+        Log.d("TurnByTurn", "Route options set with arguments: $arguments")
         this.addedWaypoints.clear()
         val points = arguments?.get("wayPoints") as HashMap<*, *>
         for (item in points) {
             val point = item.value as HashMap<*, *>
+            val name = point["Name"] as? String ?: "Entrega"
             val latitude = point["Latitude"] as Double
             val longitude = point["Longitude"] as Double
-            val isSilent = point["IsSilent"] as Boolean
-            this.addedWaypoints.add(Waypoint(Point.fromLngLat(longitude, latitude),isSilent))
+            this.addedWaypoints.add(Waypoint(name, Point.fromLngLat(longitude, latitude)))
+            Log.d("TurnByTurn", "Added waypoint: Latitude = $latitude, Longitude = $longitude, Name = $name")
         }
         this.getRoute(this.context)
         result.success(true)
     }
 
     private fun getRoute(context: Context) {
+        Log.d("TurnByTurn", "Getting route with waypoints: ${this.addedWaypoints.coordinatesList()}")
         MapboxNavigationApp.current()!!.requestRoutes(
             routeOptions = RouteOptions
                 .builder()
@@ -312,11 +320,6 @@ open class TurnByTurn(
         if (longPress != null) {
             this.longPressDestinationEnabled = longPress
         }
-
-        val onMapTap = arguments["enableOnMapTapCallback"] as? Boolean
-        if (onMapTap != null) {
-            this.enableOnMapTapCallback = onMapTap
-        }
     }
 
     open fun registerObservers() {
@@ -386,7 +389,6 @@ open class TurnByTurn(
     private var voiceInstructionsEnabled = true
     private var bannerInstructionsEnabled = true
     private var longPressDestinationEnabled = true
-    private var enableOnMapTapCallback = false
     private var animateBuildRoute = true
     private var isOptimized = false
 
@@ -459,11 +461,11 @@ open class TurnByTurn(
         }
 
         override fun onNextRouteLegStart(routeLegProgress: RouteLegProgress) {
-            // not impl
+            PluginUtilities.sendEvent(MapBoxEvents.ON_NEXTROUTELEGSTART)
         }
 
         override fun onWaypointArrival(routeProgress: RouteProgress) {
-            // not impl
+            PluginUtilities.sendEvent(MapBoxEvents.ON_WAYPOINTARRIVAL)
         }
     }
 

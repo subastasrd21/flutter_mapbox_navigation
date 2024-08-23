@@ -145,13 +145,7 @@ public class FlutterMapboxNavigationView : NavigationFactory, FlutterPlatformVie
             gesture.delegate = self
             navigationMapView?.addGestureRecognizer(gesture)
         }
-        
-        if _enableOnMapTapCallback {
-            let onTapGesture = UITapGestureRecognizer(target: self, action: #selector(handleTap(_:)))
-            onTapGesture.numberOfTapsRequired = 1
-            onTapGesture.delegate = self
-            navigationMapView?.addGestureRecognizer(onTapGesture)
-        }
+
     }
 
     func clearRoute(arguments: NSDictionary?, result: @escaping FlutterResult)
@@ -236,7 +230,6 @@ public class FlutterMapboxNavigationView : NavigationFactory, FlutterPlatformVie
 
         routeOptions.distanceMeasurementSystem = _voiceUnits == "imperial" ? .imperial : .metric
         routeOptions.locale = Locale(identifier: _language)
-        routeOptions.includesAlternativeRoutes = _alternatives
         self.routeOptions = routeOptions
 
         // Generate the route object and draw it on the map
@@ -418,37 +411,15 @@ extension FlutterMapboxNavigationView : NavigationMapViewDelegate {
 }
 
 extension FlutterMapboxNavigationView : UIGestureRecognizerDelegate {
-            
+
     public func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer, shouldRecognizeSimultaneouslyWith otherGestureRecognizer: UIGestureRecognizer) -> Bool {
         return true
     }
-    
+
     @objc func handleLongPress(_ gesture: UILongPressGestureRecognizer) {
         guard gesture.state == .ended else { return }
         let location = navigationMapView.mapView.mapboxMap.coordinate(for: gesture.location(in: navigationMapView.mapView))
         requestRoute(destination: location)
-    }
-    
-    @objc func handleTap(_ gesture: UITapGestureRecognizer) {
-        guard gesture.state == .ended else {return}
-        let location = navigationMapView.mapView.mapboxMap.coordinate(for: gesture.location(in: navigationMapView.mapView))
-        let waypoint: Encodable = [
-            "latitude" : location.latitude,
-            "longitude" : location.longitude,
-        ]
-        do {
-            let encodedData = try JSONEncoder().encode(waypoint)
-            let jsonString = String(data: encodedData,
-                                    encoding: .utf8)
-            
-            if (jsonString?.isEmpty ?? true) {
-                return
-            }
-            
-            sendEvent(eventType: .on_map_tap,data: jsonString!)
-        } catch {
-            return
-        }
     }
 
     func requestRoute(destination: CLLocationCoordinate2D) {

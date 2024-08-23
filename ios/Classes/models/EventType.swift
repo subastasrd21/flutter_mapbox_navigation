@@ -16,7 +16,8 @@ enum MapBoxEventType: String, Codable
     case speech_announcement
     case banner_instruction
     case on_arrival
+    case on_waypointarrival
+    case on_nextroutelegstart
     case failed_to_reroute
     case reroute_along
-    case on_map_tap
 }
