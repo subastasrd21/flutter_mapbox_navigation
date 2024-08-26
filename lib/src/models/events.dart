@@ -21,5 +21,6 @@ enum MapBoxEvent {
   on_waypointarrival,
   on_nextroutelegstart,
   failed_to_reroute,
-  reroute_along
+  reroute_along,
+  on_map_tap
 }
