@@ -41,6 +41,12 @@ class EmbeddedNavigationMapView(
         initFlutterChannelHandlers()
         initNavigation()
 
+        if(!(this.arguments?.get("longPressDestinationEnabled") as Boolean)) {
+            this.binding.navigationView.customizeViewOptions {
+                enableMapLongClickIntercept = false;
+            }
+        }
+
         if((this.arguments?.get("enableOnMapTapCallback") as Boolean)) {
             this.binding.navigationView.registerMapObserver(onMapClick)
         }
