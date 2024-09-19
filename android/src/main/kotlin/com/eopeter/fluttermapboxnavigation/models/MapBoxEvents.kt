@@ -12,6 +12,7 @@ enum class MapBoxEvents(val value: String) {
     MILESTONE_EVENT("milestone_event"),
     NAVIGATION_RUNNING("navigation_running"),
     NAVIGATION_CANCELLED("navigation_cancelled"),
+    NAVIGATION_USER_CANCELLED("navigation_user_cancelled"),
     NAVIGATION_FINISHED("navigation_finished"),
     FASTER_ROUTE_FOUND("faster_route_found"),
     SPEECH_ANNOUNCEMENT("speech_announcement"),

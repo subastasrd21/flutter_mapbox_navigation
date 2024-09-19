@@ -33,7 +33,7 @@ class CustomInfoPanelEndNavButtonBinder(
                 super.onAttached(mapboxNavigation)
                 button.setOnClickListener {
                     //mapboxNavigation.stopTripSession() --> limpiar las rutas en la app de flutter
-                    PluginUtilities.sendEvent(MapBoxEvents.NAVIGATION_CANCELLED)
+                    PluginUtilities.sendEvent(MapBoxEvents.NAVIGATION_USER_CANCELLED)
                     //activity.finish() --> evitar que se cierre la app al finalizar la navegacion
                 }
             }

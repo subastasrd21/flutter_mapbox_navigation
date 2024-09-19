@@ -13,6 +13,7 @@ enum MapBoxEvent {
   milestone_event,
   navigation_running,
   navigation_cancelled,
+  navigation_user_cancelled,
   navigation_finished,
   faster_route_found,
   speech_announcement,
