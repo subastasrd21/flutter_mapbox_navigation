@@ -11,6 +11,7 @@ public class MapBoxRouteProgressEvent : Codable
     let distanceTraveled: Double
     let currentLegDistanceTraveled: Double
     let currentLegDistanceRemaining: Double
+    let currentLegDurationRemaining: Double
     let currentStepInstruction: String
     let legIndex: Int
     let stepIndex: Int
@@ -41,6 +42,7 @@ public class MapBoxRouteProgressEvent : Codable
 
         currentLegDistanceTraveled = progress.currentLegProgress.distanceTraveled
         currentLegDistanceRemaining = progress.currentLegProgress.distanceRemaining
+        currentLegDurationRemaining = progress.currentLegProgress.durationRemaining
         currentStepInstruction = progress.currentLegProgress.currentStep.description
     }
 

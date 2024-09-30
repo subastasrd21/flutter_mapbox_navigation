@@ -16,6 +16,7 @@ class RouteProgressEvent {
     this.distanceTraveled,
     this.currentLegDistanceTraveled,
     this.currentLegDistanceRemaining,
+    this.currentLegDurationRemaining,
     this.currentStepInstruction,
     this.currentLeg,
     this.priorLeg,
@@ -45,6 +46,9 @@ class RouteProgressEvent {
         isNullOrZero(json['currentLegDistanceRemaining'] as num?)
             ? 0.0
             : (json['currentLegDistanceRemaining'] as num).toDouble();
+    currentLegDurationRemaining = isNullOrZero(json['currentLegDurationRemaining'] as num?)
+        ? 0.0
+        : (json['currentLegDurationRemaining'] as num).toDouble();
     currentStepInstruction = json['currentStepInstruction'] as String?;
     currentLeg = json['currentLeg'] == null
         ? null
@@ -69,6 +73,7 @@ class RouteProgressEvent {
   double? distanceTraveled;
   double? currentLegDistanceTraveled;
   double? currentLegDistanceRemaining;
+  double? currentLegDurationRemaining;
   String? currentStepInstruction;
   RouteLeg? currentLeg;
   RouteLeg? priorLeg;
